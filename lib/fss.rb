@@ -16,4 +16,18 @@ module FSS
 
     true
   end
+
+  def make_bucket(opts = {})
+    minio.create_bucket(bucket: opts[:name])
+  end
+
+  def delete_bucket(opts = {})
+    begin
+      minio.delete_bucket(bucket: opts[:bucket])
+    rescue Aws::S3::Errors::NoSuchBucket
+      return false
+    end
+
+    true
+  end
 end
