@@ -30,4 +30,20 @@ module FSS
 
     true
   end
+
+  def get_bucket_acl(opts = {})
+    minio.get_bucket_acl(bucket: opts[:bucket])
+  end
+
+  def get_bucket_policy(opts = {})
+    minio.get_bucket_policy(bucket: opts[:bucket])
+  end
+
+  def list_resources(opts = {})
+    minio.list_objects(bucket: opts[:bucket])
+  end
+
+  def put_resource(opts = {})
+    minio.put_object(body: opts[:resource_path], bucket: opts[:bucket], key: opts[:key])
+  end
 end
