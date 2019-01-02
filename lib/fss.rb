@@ -10,7 +10,9 @@ module FSS
   def bucket_exists?(opts = {})
     begin
       minio.head_bucket(bucket: opts[:bucket])
-    rescue Aws::S3::Errors::NotFound
+    rescue Aws::S3::Errors::NotFound  # Raised by S3
+      return false
+    rescue Aws::S3::Errors::Forbidden # Raised by GCS
       return false
     end
 
@@ -43,7 +45,8 @@ module FSS
     minio.list_objects(bucket: opts[:bucket])
   end
 
+  # :body is a File
   def put_resource(opts = {})
-    minio.put_object(body: opts[:resource_path], bucket: opts[:bucket], key: opts[:key])
+    minio.put_object(bucket: opts[:bucket], key: opts[:key], body: opts[:body])
   end
 end
